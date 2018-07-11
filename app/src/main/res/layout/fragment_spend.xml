@@ -1,0 +1,47 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Controller.SpendFragment">
+
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/amount_spent_et"
+        android:inputType="numberDecimal"
+        android:hint="@string/amount_hint"
+        android:layout_centerHorizontal="true"
+        android:padding="10dp"
+        android:layout_marginTop="40dp"
+        />
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/spending_spinner"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/amount_spent_et"
+        android:layout_margin="10dp"
+        >
+    </Spinner>
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/description_et"
+        android:hint="@string/description_hint"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/spending_spinner"
+        android:layout_margin="10dp"
+        />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/spend_button"
+        android:text="@string/spend_button"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/description_et"
+        android:layout_margin="10dp"
+        />
+
+
+</RelativeLayout>
