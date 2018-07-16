@@ -1,7 +1,7 @@
 package applications.home.man.alex.financetracker.Controller;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,22 +11,31 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 import applications.home.man.alex.financetracker.R;
+import applications.home.man.alex.financetracker.Model.DatabaseHelper;
+import applications.home.man.alex.financetracker.Util.Constants;
 
 
 /**
  * A simple {@link android.support.v4.app.Fragment} subclass.
  */
 public class SpendFragment extends android.support.v4.app.Fragment {
+    private static final String TAG = "SPEND FRAGMENT: ";
+    public static final String RESULT_FAILED = "Failed to store transaction";
+    public static final String RESULT_PASSED = "Stored transaction";
+//    public static DatabaseHelper db;
     EditText amount_et;
     EditText description_et;
     Spinner type_spinner;
     Button spend_bt;
-    String type = "";
     ArrayList<String> type_list = new ArrayList<>();
     ArrayAdapter<String> type_spinner_array_adapter;
+
     public SpendFragment() {
         // Required empty public constructor
     }
@@ -37,6 +46,7 @@ public class SpendFragment extends android.support.v4.app.Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_spend, container, false);
+
         type_spinner = (Spinner) v.findViewById(R.id.spending_spinner);
         amount_et = (EditText) v.findViewById(R.id.amount_spent_et);
         description_et = (EditText) v.findViewById(R.id.description_et);
@@ -53,6 +63,9 @@ public class SpendFragment extends android.support.v4.app.Fragment {
         type_spinner_array_adapter.setDropDownViewResource(
                 R.layout.support_simple_spinner_dropdown_item);
         type_spinner.setAdapter(type_spinner_array_adapter);
+
+        set_event_listeners();
+
         return v;
     }
 
@@ -64,9 +77,7 @@ public class SpendFragment extends android.support.v4.app.Fragment {
         spend_bt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String amount_spent = amount_et.getText().toString();
-                String description = description_et.getText().toString().trim();
-                if (amount_spent.isEmpty() || description.isEmpty()) {
+                if (isEmpty(amount_et) || isEmpty(description_et)) {
                     Toast.makeText(getActivity(),
                             getString(R.string.inalid_input), Toast.LENGTH_LONG).show();
                 }
@@ -74,10 +85,35 @@ public class SpendFragment extends android.support.v4.app.Fragment {
                     //connection to database should be set
                     //send type, amount spent, description, and date to database
                     //update database
+                    Date c = Calendar.getInstance().getTime();
+                    SimpleDateFormat df = new SimpleDateFormat("MM-dd-yyyy");
+                    String formattedDate = df.format(c);
+                    Log.d(TAG, "Date: " + formattedDate);
 
+                    String type = type_spinner.getSelectedItem().toString();
+                    double amount_spent = Double.parseDouble(amount_et.getText().toString());
+                    String description = description_et.getText().toString();
+
+                    boolean result = DatabaseHelper.getInstance(getActivity()).addTransaction(formattedDate, type,
+                            amount_spent, description);
+                    if (!result)
+                        Toast.makeText(getActivity(), RESULT_FAILED, Toast.LENGTH_SHORT).show();
+                    else
+                        Toast.makeText(getActivity(), RESULT_PASSED, Toast.LENGTH_SHORT).show();
+                    Log.d(TAG, "description: " + description);
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            HistoryFragment.hlAdapter.notifyDataSetChanged();
+                            Log.d("SPENDFRAGMENT: ", "adapter should have been notified");
+                        }
+                    });
                 }
             }
         });
     }
 
+    public boolean isEmpty(EditText et) {
+        return et.getText().toString().trim().isEmpty();
+    }
 }

@@ -17,5 +17,9 @@
     <string name="report_tab">Reports</string>
 
     <!-- HISTORY LIST -->
+    <string name="type_text">Type: </string>
+    <string name="date_text">Date: </string>
+    <string name="amt_text">Amount: </string>
+    <string name="desc_text">Description: </string>
     <string name="temp">TEMP</string>
 </resources>

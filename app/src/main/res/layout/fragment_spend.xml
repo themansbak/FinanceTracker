@@ -2,7 +2,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Controller.SpendFragment">
+    tools:context=".Controller.SpendFragment"
+    android:focusableInTouchMode="true"
+    android:focusable="true">
 
 
     <EditText

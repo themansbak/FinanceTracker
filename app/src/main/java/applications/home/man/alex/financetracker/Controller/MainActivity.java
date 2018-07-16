@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 
 import android.widget.TextView;
 
+import applications.home.man.alex.financetracker.Model.DatabaseHelper;
 import applications.home.man.alex.financetracker.R;
 
 public class MainActivity extends AppCompatActivity {
@@ -38,6 +39,11 @@ public class MainActivity extends AppCompatActivity {
      */
     private ViewPager mViewPager;
 
+    /**
+     * DatabaseHelper used by rest of applciation
+     */
+    public static DatabaseHelper mDBHelper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +61,8 @@ public class MainActivity extends AppCompatActivity {
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
+
+        mDBHelper = new DatabaseHelper(getApplicationContext());
     }
 
 
@@ -134,8 +142,9 @@ public class MainActivity extends AppCompatActivity {
                     return new SpendFragment();
                 case 1:
                     return new HistoryFragment();
+                default:
+                    return new SpendFragment();
             }
-            return PlaceholderFragment.newInstance(position + 1);
         }
 
         @Override
