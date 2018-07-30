@@ -33,7 +33,9 @@ public class HistoryFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_history, container, false);
         transactList = DatabaseHelper.getInstance(getActivity()).getTransactionList();
         hlAdapter = new HistoryListAdapter(transactList, getActivity());
-
+        for ( Transaction transaction : transactList) {
+            Log.d("HISTORYFRAGMENT: ", transaction.toString());
+        }
         listView = (ListView) v.findViewById(R.id.history_list_view);
         listView.setAdapter(hlAdapter);
 
@@ -65,6 +67,7 @@ public class HistoryFragment extends Fragment {
              *
              */
             final Transaction t = mTransactions.get(position);
+            Log.d("HISTORYFRAGMENT", "" + position);
             type_tv = (TextView) convertView.findViewById(R.id.list_type);
             amount_tv = (TextView) convertView.findViewById(R.id.list_amount);
             desc_tv = (TextView) convertView.findViewById(R.id.list_description);

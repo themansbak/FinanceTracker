@@ -81,16 +81,21 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         Cursor cursor = db.rawQuery(query, null);
         Log.d("DATABASEHELPER: ", DatabaseUtils.dumpCursorToString(cursor));
         if (cursor.moveToFirst()) {
-            while (!cursor.isAfterLast()) {
+            do {
                 String date = cursor.getString(cursor.getColumnIndex(DATE_COL));
                 String type = cursor.getString(cursor.getColumnIndex(TYPE_COL));
                 Double amount =
                         Double.parseDouble(cursor.getString(cursor.getColumnIndex(AMT_COL)));
                 String desc = cursor.getString(cursor.getColumnIndex(DESC_COL));
-                transaction_list.add(new Transaction(amount, type, desc, date));
-                Log.d("DATABSEHELPER: ", "IN WHILE LOOP");
-                cursor.moveToNext();
-            }
+                Transaction t = new Transaction(amount, type, desc, date);
+                Log.d("DATABASEHELPER: ", "IN WHILE LOOP t " + t.toString());
+                transaction_list.add(t);
+                Log.d("DATABASEHELPER: ", "IN WHILE LOOP array_list" + transaction_list.toString());
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        for ( Transaction transaction : transaction_list) {
+            Log.d("DATABASEHELPER: ", "RETURNING LIST " + transaction.toString());
         }
         return transaction_list;
     }

@@ -2,6 +2,8 @@ package applications.home.man.alex.financetracker.Model;
 
 import java.io.Serializable;
 
+import applications.home.man.alex.financetracker.Util.Constants;
+
 /**
  * Created by Alex on 7/8/2018.
  */
@@ -28,6 +30,12 @@ public class Transaction implements Serializable{
     public String get_type() { return type; }
     public String get_description() {return description; }
     public String get_date() { return date; }
+    public String toString() {
+        return "Amount: " + get_amount() + ",\n" +
+                "Type: " + get_type() + ",\n" +
+                "Desc: " + get_description() + ",\n" +
+                "Date: " + get_date();
+    }
 
     /**
      * DON'T THINK I NEED ANY SETTERS FOR THIS
