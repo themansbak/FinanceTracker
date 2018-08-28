@@ -73,7 +73,6 @@ public class HistoryFragment extends Fragment {
             desc_tv = (TextView) convertView.findViewById(R.id.list_description);
             date_tv = (TextView) convertView.findViewById(R.id.list_date);
 
-
             type_tv.setText(t.get_type());
             amount_tv.setText("" + t.get_amount());
             desc_tv.setText(t.get_description());

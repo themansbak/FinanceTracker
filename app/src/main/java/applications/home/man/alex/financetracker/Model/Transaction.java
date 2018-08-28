@@ -9,10 +9,10 @@ import applications.home.man.alex.financetracker.Util.Constants;
  */
 public class Transaction implements Serializable{
     private static long SERIALIZABLE_UID = 0L;
-    private static String type;
-    private static String description;
-    private static String date;
-    private static double amount;
+    private String type;
+    private String description;
+    private String date;
+    private double amount;
 
     public Transaction() {
         type = null;
