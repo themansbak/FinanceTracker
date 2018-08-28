@@ -14,7 +14,7 @@ public class TransactionSingleton {
 
     private TransactionSingleton(Context c) {
         this.context = c;
-        this.transaction_list = new ArrayList<>();
+        this.transaction_list = DatabaseHelper.getInstance(c).getTransactionList();
     }
     public static TransactionSingleton get(Context c) {
         if (spending_singleton == null) {

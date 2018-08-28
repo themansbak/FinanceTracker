@@ -1,10 +1,13 @@
 package applications.home.man.alex.financetracker.Controller;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,6 +19,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+import applications.home.man.alex.financetracker.Model.Transaction;
+import applications.home.man.alex.financetracker.Model.TransactionSingleton;
 import applications.home.man.alex.financetracker.R;
 import applications.home.man.alex.financetracker.Model.DatabaseHelper;
 import applications.home.man.alex.financetracker.Util.Constants;
@@ -28,7 +33,7 @@ public class SpendFragment extends android.support.v4.app.Fragment {
     private static final String TAG = "SPEND FRAGMENT: ";
     public static final String RESULT_FAILED = "Failed to store transaction";
     public static final String RESULT_PASSED = "Stored transaction";
-//    public static DatabaseHelper db;
+
     EditText amount_et;
     EditText description_et;
     Spinner type_spinner;
@@ -39,7 +44,6 @@ public class SpendFragment extends android.support.v4.app.Fragment {
     public SpendFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -82,9 +86,6 @@ public class SpendFragment extends android.support.v4.app.Fragment {
                             getString(R.string.inalid_input), Toast.LENGTH_LONG).show();
                 }
                 else {
-                    //connection to database should be set
-                    //send type, amount spent, description, and date to database
-                    //update database
                     Date c = Calendar.getInstance().getTime();
                     SimpleDateFormat df = new SimpleDateFormat("MM-dd-yyyy");
                     String formattedDate = df.format(c);
@@ -101,6 +102,8 @@ public class SpendFragment extends android.support.v4.app.Fragment {
                     else
                         Toast.makeText(getActivity(), RESULT_PASSED, Toast.LENGTH_SHORT).show();
                     Log.d(TAG, "description: " + description);
+                    TransactionSingleton.get(getActivity()).add_spending(
+                            new Transaction(amount_spent, formattedDate, type, description));
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -108,11 +111,20 @@ public class SpendFragment extends android.support.v4.app.Fragment {
                             Log.d("SPENDFRAGMENT: ", "adapter should have been notified");
                         }
                     });
+                    hideKeyboardFrom(getContext(), getView());
+                    clear();
                 }
             }
         });
     }
-
+    public static void hideKeyboardFrom(Context context, View view) {
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+    public void clear() {
+        amount_et.setText("");
+        description_et.setText("");
+    }
     public boolean isEmpty(EditText et) {
         return et.getText().toString().trim().isEmpty();
     }

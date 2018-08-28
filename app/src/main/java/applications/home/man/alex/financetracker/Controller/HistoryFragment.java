@@ -10,18 +10,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
 import applications.home.man.alex.financetracker.Model.Transaction;
+import applications.home.man.alex.financetracker.Model.TransactionSingleton;
 import applications.home.man.alex.financetracker.R;
 import applications.home.man.alex.financetracker.Model.DatabaseHelper;
 import applications.home.man.alex.financetracker.Util.Constants;
 
 public class HistoryFragment extends Fragment {
     ListView listView;
-    ArrayList<Transaction> transactList;
+    Spinner filterSpinner;
+    ArrayAdapter<String> filterArrayAdapter;
+    ArrayList filterList;
+    public ArrayList<Transaction> transactList;
     public static HistoryListAdapter hlAdapter;
     public HistoryFragment() {
         // Required empty public constructor
@@ -31,15 +36,30 @@ public class HistoryFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_history, container, false);
-        transactList = DatabaseHelper.getInstance(getActivity()).getTransactionList();
+        transactList = TransactionSingleton.get(getActivity()).get_spending_list();
         hlAdapter = new HistoryListAdapter(transactList, getActivity());
-        for ( Transaction transaction : transactList) {
-            Log.d("HISTORYFRAGMENT: ", transaction.toString());
-        }
         listView = (ListView) v.findViewById(R.id.history_list_view);
         listView.setAdapter(hlAdapter);
+        filterSpinner = (Spinner) v.findViewById(R.id.filter_spinner);
 
+        filterList.add("Food");
+        filterList.add("Clothing");
+        filterList.add("Gas");
+        filterList.add("Entertainment");
+        filterList.add("Rent");
+        filterArrayAdapter = new ArrayAdapter<>(
+                this.getActivity(), android.R.layout.simple_spinner_dropdown_item, filterList
+        );
+        filterArrayAdapter.setDropDownViewResource(
+                R.layout.support_simple_spinner_dropdown_item
+        );
+        filterSpinner.setAdapter(filterArrayAdapter);
         return v;
+    }
+
+    public void set_filter_spinner()
+    {
+
     }
 
     public class HistoryListAdapter extends ArrayAdapter<Transaction> {
@@ -61,13 +81,7 @@ public class HistoryFragment extends Fragment {
             if (convertView == null) {
                 convertView = getActivity().getLayoutInflater().inflate(R.layout.list_history_spending, null);
             }
-            /***
-             * TODO
-             * UTILIZE SINGLETON IN HERE
-             *
-             */
             final Transaction t = mTransactions.get(position);
-            Log.d("HISTORYFRAGMENT", "" + position);
             type_tv = (TextView) convertView.findViewById(R.id.list_type);
             amount_tv = (TextView) convertView.findViewById(R.id.list_amount);
             desc_tv = (TextView) convertView.findViewById(R.id.list_description);
@@ -81,5 +95,4 @@ public class HistoryFragment extends Fragment {
             return convertView;
         }
     }
-
 }
