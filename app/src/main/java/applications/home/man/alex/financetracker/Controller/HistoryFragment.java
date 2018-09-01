@@ -25,7 +25,7 @@ public class HistoryFragment extends Fragment {
     ListView listView;
     Spinner filterSpinner;
     ArrayAdapter<String> filterArrayAdapter;
-    ArrayList filterList;
+    ArrayList<String> filterList;
     public ArrayList<Transaction> transactList;
     public static HistoryListAdapter hlAdapter;
     public HistoryFragment() {
@@ -42,6 +42,7 @@ public class HistoryFragment extends Fragment {
         listView.setAdapter(hlAdapter);
         filterSpinner = (Spinner) v.findViewById(R.id.filter_spinner);
 
+        filterList.add("Date");
         filterList.add("Food");
         filterList.add("Clothing");
         filterList.add("Gas");
@@ -57,9 +58,14 @@ public class HistoryFragment extends Fragment {
         return v;
     }
 
+    /*
+    ** TODO
+    *  Modify list upon selection
+    *
+     */
     public void set_filter_spinner()
     {
-
+        
     }
 
     public class HistoryListAdapter extends ArrayAdapter<Transaction> {

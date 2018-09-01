@@ -3,8 +3,8 @@ README
 Simple Android application to track monthly spendings.
 
 Current progress:
-- Issue with updating history list fragment
+- Filter dropdown for history tab
 
 TODO:
 - Implement GOogle charts API using items from arrayadapter
-- Filter dropdown for history tab
+
